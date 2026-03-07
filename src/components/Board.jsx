@@ -2,10 +2,10 @@ import { useMemo, useState, useEffect } from 'react';
 import MahjongTile from './MahjongTile';
 import { isFree } from '../game/rules';
 
-// Each cell is TILE_W x TILE_H px. Tiles overlap by OFFSET px per layer.
 const TILE_W = 52;
 const TILE_H = 64;
-const OFFSET = 4; // 3d stack offset per layer
+const OFFSET = 7;   // 3D stack offset per layer (px)
+const OVERLAP = 0.50; // adjacent tiles overlap by 50% — compact board, larger tiles
 const H_PADDING = 32; // total horizontal padding from .board-scroll (16px × 2)
 const V_PADDING = 32; // total vertical padding from .board-scroll (16px × 2)
 const UI_HEIGHT = 52; // approx height of the single header bar
@@ -24,11 +24,12 @@ export default function Board({ board, onSelect }) {
     [board]
   );
 
-  // Compute board bounding box
-  const maxCol = Math.max(...activeTiles.map(t => t.col), 28);
+  // Compute board bounding box accounting for tile overlap
+  const maxCol = Math.max(...activeTiles.map(t => t.col), 22);
   const maxRow = Math.max(...activeTiles.map(t => t.row), 14);
-  const boardW = (maxCol / 2 + 1) * TILE_W + 5 * OFFSET;
-  const boardH = (maxRow / 2 + 1) * TILE_H + 5 * OFFSET;
+  const maxLayer = Math.max(...activeTiles.map(t => t.layer), 3);
+  const boardW = (maxCol / 2) * TILE_W * OVERLAP + TILE_W + maxLayer * OFFSET;
+  const boardH = (maxRow / 2) * TILE_H * OVERLAP + TILE_H + maxLayer * OFFSET;
 
   // Scale down to fit viewport in both axes; never scale up
   const scaleW = (winSize.w - H_PADDING) / boardW;
@@ -55,8 +56,8 @@ export default function Board({ board, onSelect }) {
       >
         {sorted.map(tile => {
           const free = isFree(tile, board);
-          const left = (tile.col / 2) * TILE_W + tile.layer * OFFSET;
-          const top  = (tile.row / 2) * TILE_H - tile.layer * OFFSET;
+          const left = (tile.col / 2) * TILE_W * OVERLAP + tile.layer * OFFSET;
+          const top  = (tile.row / 2) * TILE_H * OVERLAP - tile.layer * OFFSET;
 
           return (
             <div
@@ -65,7 +66,7 @@ export default function Board({ board, onSelect }) {
                 position: 'absolute',
                 left,
                 top,
-                zIndex: tile.layer * 100 + tile.row,
+                zIndex: tile.layer * 10000 + tile.row * 100 + tile.col,
                 width: TILE_W,
                 height: TILE_H,
               }}

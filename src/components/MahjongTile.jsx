@@ -32,7 +32,6 @@ export default function MahjongTile({ tile, free, onClick }) {
 
   const symbol = SYMBOLS[suit]?.[value] ?? '?';
   const color = SUIT_COLORS[suit] ?? '#333';
-  const isNumbered = suit === SUITS.BAMBOO || suit === SUITS.CIRCLES;
 
   return (
     <button
@@ -45,8 +44,16 @@ export default function MahjongTile({ tile, free, onClick }) {
       aria-label={`${suit} ${value}`}
       style={{ '--tile-color': color }}
     >
-      <span className="tile-symbol">{symbol}</span>
-      {isNumbered && <span className="tile-number">{value}</span>}
+      {suit === SUITS.CIRCLES ? (
+        <div className="tile-circle" style={{ background: color }}>
+          <span className="tile-circle-num">{value}</span>
+        </div>
+      ) : (
+        <>
+          <span className="tile-symbol">{symbol}</span>
+          {suit === SUITS.BAMBOO && <span className="tile-number">{value}</span>}
+        </>
+      )}
     </button>
   );
 }
