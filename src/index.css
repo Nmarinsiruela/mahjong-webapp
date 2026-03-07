@@ -1,0 +1,225 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green: #1a6b3a;
+  --green-dark: #134f2b;
+  --tile-bg: #fdf6e3;
+  --tile-border: #c8a96e;
+  --tile-shadow: #8b6914;
+  --tile-blocked: #d4c9a8;
+  --tile-selected: #ffe066;
+  --tile-selected-border: #f0a500;
+  --text-light: #f5f0e8;
+  --accent: #e8c766;
+}
+
+html, body {
+  height: 100%;
+  background: var(--green-dark);
+  color: var(--text-light);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── App shell ─────────────────────────────────── */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  background: var(--green-dark);
+  padding: 6px 16px;
+  border-bottom: 2px solid #2a8a50;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.app-header h1 {
+  font-size: 1.2rem;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.app-header h1 span {
+  font-size: 1rem;
+  margin-right: 6px;
+}
+
+/* ─── Game info (now inline in header) ──────────── */
+.game-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.info-stats {
+  display: flex;
+  gap: 18px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.75;
+}
+
+.stat-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.game-message {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.25);
+}
+
+.game-message.won   { color: #7effa0; }
+.game-message.stuck { color: #ff9e9e; }
+
+.btn-new-game {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #1a1a1a;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.btn-new-game:active { filter: brightness(0.88); }
+
+/* ─── Board scroll wrapper ──────────────────────── */
+.board-scroll {
+  flex: 1;
+  overflow: hidden;
+  padding: 16px;
+  background: var(--green);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* ─── Tiles ─────────────────────────────────────── */
+.mahjong-tile {
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--tile-border);
+  border-radius: 5px;
+  background: var(--tile-bg);
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  line-height: 1;
+  position: relative;
+  transition: transform 0.1s, box-shadow 0.1s;
+  /* 3D look */
+  box-shadow:
+    2px 2px 0 var(--tile-shadow),
+    3px 3px 0 var(--tile-shadow);
+  user-select: none;
+}
+
+.mahjong-tile .tile-symbol {
+  color: var(--tile-color, #333);
+  font-size: 1.4rem;
+}
+
+.mahjong-tile .tile-number {
+  font-size: 0.55rem;
+  color: #888;
+  margin-top: 1px;
+}
+
+/* Free tile — can be tapped */
+.mahjong-tile.free {
+  cursor: pointer;
+  background: var(--tile-bg);
+}
+
+.mahjong-tile.free:active {
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0 var(--tile-shadow);
+}
+
+/* Blocked tile */
+.mahjong-tile.blocked {
+  background: var(--tile-blocked);
+  opacity: 0.72;
+}
+
+/* Selected tile */
+.mahjong-tile.selected {
+  background: var(--tile-selected);
+  border-color: var(--tile-selected-border);
+  box-shadow:
+    2px 2px 0 #b07800,
+    3px 3px 0 #b07800,
+    0 0 8px rgba(240,165,0,0.6);
+}
+
+/* ─── Rotate prompt (portrait on mobile) ─────────── */
+.rotate-prompt {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--green);
+  color: var(--text-light);
+  text-align: center;
+  padding: 32px;
+}
+
+.rotate-icon {
+  font-size: 4rem;
+  animation: rotate-hint 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes rotate-hint {
+  from { transform: rotate(-45deg); }
+  to   { transform: rotate(45deg); }
+}
+
+.rotate-prompt p {
+  font-size: 1.1rem;
+  opacity: 0.85;
+}
+
+/* ─── Responsive ─────────────────────────────────── */
+@media (max-width: 480px) {
+  .app-header { padding: 4px 10px; gap: 8px; }
+  .btn-new-game { padding: 5px 10px; font-size: 0.8rem; }
+}
