@@ -5,7 +5,7 @@ import { isFree } from '../game/rules';
 const TILE_W = 52;
 const TILE_H = 64;
 const OFFSET = 7;   // 3D stack offset per layer (px)
-const OVERLAP = 0.50; // adjacent tiles overlap by 50% — compact board, larger tiles
+const OVERLAP = 0.70; // adjacent tiles overlap by 30% — compact but tiles remain visible
 const H_PADDING = 32; // total horizontal padding from .board-scroll (16px × 2)
 const V_PADDING = 32; // total vertical padding from .board-scroll (16px × 2)
 const UI_HEIGHT = 52; // approx height of the single header bar
