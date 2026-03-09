@@ -1,7 +1,17 @@
-import { useReducer, useCallback } from 'react';
+import { useReducer, useCallback, useEffect } from 'react';
 import { ALL_TILES, tilesMatch } from './tiles';
 import { buildLayout } from './layout';
 import { isFree, hasAnyMoves } from './rules';
+
+const STORAGE_KEY = 'mahjong-state';
+
+function loadSaved() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (Array.isArray(saved?.board) && saved.board.length === 144) return saved;
+  } catch { /* ignore */ }
+  return null;
+}
 
 function newGame() {
   const board = buildLayout(ALL_TILES);
@@ -81,7 +91,12 @@ function reducer(state, action) {
 }
 
 export function useGameState() {
-  const [state, dispatch] = useReducer(reducer, null, newGame);
+  const [state, dispatch] = useReducer(reducer, null, () => loadSaved() ?? newGame());
+
+  // Persist state after every change
+  useEffect(() => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch { /* ignore */ }
+  }, [state]);
 
   const select = useCallback((uid) => dispatch({ type: 'SELECT', uid }), []);
   const newGame_ = useCallback(() => dispatch({ type: 'NEW_GAME' }), []);

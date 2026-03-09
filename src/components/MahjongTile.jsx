@@ -3,7 +3,7 @@ import { SUITS } from '../game/tiles';
 // Emoji/symbol map for each tile type
 const SYMBOLS = {
   [SUITS.CHARACTERS]: { 1:'一',2:'二',3:'三',4:'四',5:'五',6:'六',7:'七',8:'八',9:'九' },
-  [SUITS.BAMBOO]:     { 1:'🎋',2:'🎋',3:'🎋',4:'🎋',5:'🎋',6:'🎋',7:'🎋',8:'🎋',9:'🎋' },
+  [SUITS.BAMBOO]:     { 1:'1',2:'2',3:'3',4:'4',5:'5',6:'6',7:'7',8:'8',9:'9' },
   [SUITS.CIRCLES]:    { 1:'①',2:'②',3:'③',4:'④',5:'⑤',6:'⑥',7:'⑦',8:'⑧',9:'⑨' },
   [SUITS.WINDS]:      { east:'東',south:'南',west:'西',north:'北' },
   [SUITS.DRAGONS]:    { red:'中',green:'發',white:'白' },
@@ -45,7 +45,6 @@ export default function MahjongTile({ tile, free, onClick }) {
       style={{ '--tile-color': color }}
     >
       <span className="tile-symbol">{symbol}</span>
-      {suit === SUITS.BAMBOO && <span className="tile-number">{value}</span>}
     </button>
   );
 }
