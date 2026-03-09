@@ -4,7 +4,7 @@ import { SUITS } from '../game/tiles';
 const SYMBOLS = {
   [SUITS.CHARACTERS]: { 1:'一',2:'二',3:'三',4:'四',5:'五',6:'六',7:'七',8:'八',9:'九' },
   [SUITS.BAMBOO]:     { 1:'🎋',2:'🎋',3:'🎋',4:'🎋',5:'🎋',6:'🎋',7:'🎋',8:'🎋',9:'🎋' },
-  [SUITS.CIRCLES]:    { 1:'🔵',2:'🔵',3:'🔵',4:'🔵',5:'🔵',6:'🔵',7:'🔵',8:'🔵',9:'🔵' },
+  [SUITS.CIRCLES]:    { 1:'①',2:'②',3:'③',4:'④',5:'⑤',6:'⑥',7:'⑦',8:'⑧',9:'⑨' },
   [SUITS.WINDS]:      { east:'東',south:'南',west:'西',north:'北' },
   [SUITS.DRAGONS]:    { red:'中',green:'發',white:'白' },
   [SUITS.FLOWERS]:    { plum:'梅',orchid:'蘭',chrysanthemum:'菊',bamboo:'竹' },
@@ -44,16 +44,8 @@ export default function MahjongTile({ tile, free, onClick }) {
       aria-label={`${suit} ${value}`}
       style={{ '--tile-color': color }}
     >
-      {suit === SUITS.CIRCLES ? (
-        <div className="tile-circle" style={{ background: color }}>
-          <span className="tile-circle-num">{value}</span>
-        </div>
-      ) : (
-        <>
-          <span className="tile-symbol">{symbol}</span>
-          {suit === SUITS.BAMBOO && <span className="tile-number">{value}</span>}
-        </>
-      )}
+      <span className="tile-symbol">{symbol}</span>
+      {suit === SUITS.BAMBOO && <span className="tile-number">{value}</span>}
     </button>
   );
 }

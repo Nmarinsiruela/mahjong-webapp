@@ -25,8 +25,8 @@ export default function Board({ board, onSelect }) {
   );
 
   // Compute board bounding box accounting for tile overlap
-  const maxCol = Math.max(...activeTiles.map(t => t.col), 22);
-  const maxRow = Math.max(...activeTiles.map(t => t.row), 14);
+  const maxCol = Math.max(...activeTiles.map(t => t.col), 30);
+  const maxRow = Math.max(...activeTiles.map(t => t.row), 10);
   const maxLayer = Math.max(...activeTiles.map(t => t.layer), 3);
   const boardW = (maxCol / 2) * TILE_W * OVERLAP + TILE_W + maxLayer * OFFSET;
   const boardH = (maxRow / 2) * TILE_H * OVERLAP + TILE_H + maxLayer * OFFSET;
