@@ -3,11 +3,12 @@
 // A tile is 2 units wide × 2 units tall; adjacent tiles share a boundary.
 // Layout is 16 cols × 6 rows (2:1 ratio) for better fit on landscape screens.
 
-// Layer 0 base:  16 cols × 6 rows = 96
-// Layer 1 center: 8 cols × 4 rows = 32
-// Layer 2 inner:  6 cols × 2 rows = 12
-// Layer 3 core:   2 cols × 2 rows =  4
+// Layer 0 base:   8 cols × 12 rows = 96
+// Layer 1 center: 4 cols ×  8 rows = 32
+// Layer 2 inner:  2 cols ×  6 rows = 12
+// Layer 3 core:   2 cols ×  2 rows =  4
 // Total: 96 + 32 + 12 + 4 = 144
+// Ratio ~1:1.75 (taller than wide, fits portrait mobile)
 
 function range(start, stop, step = 2) {
   const r = [];
@@ -22,17 +23,17 @@ function layer(z, cols, rows) {
 }
 
 const POSITIONS = [
-  // Layer 0 — 96 tiles (16 × 6), wider than tall
-  ...layer(0, range(0, 30), range(0, 10)),
+  // Layer 0 — 96 tiles (8 × 12), taller than wide
+  ...layer(0, range(0, 14), range(0, 22)),
 
-  // Layer 1 — 32 tiles (8 × 4), centered
-  ...layer(1, range(8, 22), range(2, 8)),
+  // Layer 1 — 32 tiles (4 × 8), centered
+  ...layer(1, range(4, 10), range(4, 18)),
 
-  // Layer 2 — 12 tiles (6 × 2), centered
-  ...layer(2, range(10, 20), range(4, 6)),
+  // Layer 2 — 12 tiles (2 × 6), centered
+  ...layer(2, range(6,  8), range(6, 16)),
 
   // Layer 3 — 4 tiles (2 × 2), centered
-  ...layer(3, range(14, 16), range(4, 6)),
+  ...layer(3, range(6,  8), range(10, 12)),
 ];
 
 // Sanity check (dev only)

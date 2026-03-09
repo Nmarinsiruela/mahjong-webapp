@@ -124,7 +124,7 @@ html, body {
   padding: 16px;
   background: var(--green);
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
 }
 

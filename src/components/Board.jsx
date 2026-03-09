@@ -25,16 +25,16 @@ export default function Board({ board, onSelect }) {
   );
 
   // Compute board bounding box accounting for tile overlap
-  const maxCol = Math.max(...activeTiles.map(t => t.col), 30);
-  const maxRow = Math.max(...activeTiles.map(t => t.row), 10);
+  const maxCol = Math.max(...activeTiles.map(t => t.col), 14);
+  const maxRow = Math.max(...activeTiles.map(t => t.row), 22);
   const maxLayer = Math.max(...activeTiles.map(t => t.layer), 3);
   const boardW = (maxCol / 2) * TILE_W * OVERLAP + TILE_W + maxLayer * OFFSET;
   const boardH = (maxRow / 2) * TILE_H * OVERLAP + TILE_H + maxLayer * OFFSET;
 
-  // Scale down to fit viewport in both axes; never scale up
+  // Scale to fill available space in both axes (up or down as needed)
   const scaleW = (winSize.w - H_PADDING) / boardW;
   const scaleH = (winSize.h - UI_HEIGHT - V_PADDING) / boardH;
-  const scale = Math.min(1, scaleW, scaleH);
+  const scale = Math.min(scaleW, scaleH);
 
   // Sort: lower layers first, then higher so top layers render on top
   const sorted = [...activeTiles].sort((a, b) =>
