@@ -1,5 +1,5 @@
 // A tile is FREE if:
-//  1. Nothing covers it from above (no tile on layer+1 overlaps its position)
+//  1. Nothing covers it from above (no tile on ANY higher layer overlaps its position)
 //  2. It has no neighbor on at least one side (left OR right)
 
 function overlaps(a, b) {
@@ -12,9 +12,9 @@ export function isFree(tile, board) {
 
   const active = board.filter(t => !t.removed && t.uid !== tile.uid);
 
-  // Check if covered from above
+  // Check if covered by any tile on a higher layer
   const coveredAbove = active.some(
-    t => t.layer === tile.layer + 1 && overlaps(t, tile)
+    t => t.layer > tile.layer && overlaps(t, tile)
   );
   if (coveredAbove) return false;
 
