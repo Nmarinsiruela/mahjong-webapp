@@ -1,4 +1,5 @@
 import { memo, useState } from 'react';
+import { useI18n } from '../../i18n';
 import { SUITS } from '../../logic/tiles';
 import './MahjongTile.css';
 
@@ -23,24 +24,20 @@ const SUIT_COLORS = {
   [SUITS.SEASONS]:    '#16a085',
 };
 
-// Spanish names for screen readers
-const NAMES = {
-  [SUITS.CHARACTERS]: v => `Carácter ${v}`,
-  [SUITS.BAMBOO]:     v => `Bambú ${v}`,
-  [SUITS.CIRCLES]:    v => `Círculo ${v}`,
-  [SUITS.WINDS]:      v => `Viento ${{ east: 'este', south: 'sur', west: 'oeste', north: 'norte' }[v]}`,
-  [SUITS.DRAGONS]:    v => `Dragón ${{ red: 'rojo', green: 'verde', white: 'blanco' }[v]}`,
-  [SUITS.FLOWERS]:    v => `Flor, ${{ plum: 'ciruelo', orchid: 'orquídea', chrysanthemum: 'crisantemo', bamboo: 'bambú' }[v]}`,
-  [SUITS.SEASONS]:    v => `Estación, ${{ spring: 'primavera', summer: 'verano', autumn: 'otoño', winter: 'invierno' }[v]}`,
-};
+// Name for screen readers: numbered suits are functions of the value
+function tileName(names, { suit, value }) {
+  const entry = names[suit];
+  return (typeof entry === 'function' ? entry(value) : entry?.[value]) ?? `${suit} ${value}`;
+}
 
 function MahjongTile({ index, face, free, selected, hinted, dimBlocked, onSelect }) {
+  const { t } = useI18n();
   const [shaking, setShaking] = useState(false);
   const { suit, value } = face;
 
   const symbol = SYMBOLS[suit]?.[value] ?? '?';
   const color = SUIT_COLORS[suit] ?? '#333';
-  const name = NAMES[suit]?.(value) ?? `${suit} ${value}`;
+  const name = tileName(t.tiles, face);
 
   // Tapping a blocked tile shakes it instead of failing silently
   const handleClick = () => (free ? onSelect(index) : setShaking(true));
@@ -58,7 +55,7 @@ function MahjongTile({ index, face, free, selected, hinted, dimBlocked, onSelect
       ].filter(Boolean).join(' ')}
       onClick={handleClick}
       onAnimationEnd={e => e.animationName === 'tile-shake' && setShaking(false)}
-      aria-label={free ? name : `${name}, bloqueada`}
+      aria-label={free ? name : t.game.blocked(name)}
       aria-pressed={selected}
       style={{ '--tile-color': color }}
     >

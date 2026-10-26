@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import DifficultyPicker from '../components/DifficultyPicker';
 import Stars from '../components/Stars';
 import { BackIcon } from '../components/Icons';
+import { useI18n } from '../i18n';
 import { LEVEL_COUNT } from '../logic/levels';
 import { nextLevel, completedCount } from '../logic/progress';
 import './LevelSelect.css';
@@ -13,6 +14,7 @@ const BLOCKS = Array.from({ length: LEVEL_COUNT / BLOCK }, (_, b) =>
 
 // A wall of tiles: face-down while locked, face-up once reachable
 export default function LevelSelect({ progress, onPlay, onBack, onDifficultyChange }) {
+  const { t } = useI18n();
   const { difficulty } = progress;
   const { unlocked, stars } = progress[difficulty];
   const current = nextLevel(progress, difficulty);
@@ -25,11 +27,11 @@ export default function LevelSelect({ progress, onPlay, onBack, onDifficultyChan
   return (
     <div className="screen levels">
       <header className="bar">
-        <button type="button" className="icon-btn" onClick={onBack} aria-label="Volver al menú">
+        <button type="button" className="icon-btn" onClick={onBack} aria-label={t.levels.back}>
           <BackIcon />
         </button>
-        <h1 className="bar-title">Niveles</h1>
-        <span className="bar-meta">{completedCount(progress, difficulty)} de {LEVEL_COUNT}</span>
+        <h1 className="bar-title">{t.levels.title}</h1>
+        <span className="bar-meta">{t.levels.count(completedCount(progress, difficulty), LEVEL_COUNT)}</span>
       </header>
 
       <div className="levels-picker">
@@ -38,7 +40,7 @@ export default function LevelSelect({ progress, onPlay, onBack, onDifficultyChan
 
       <div className="levels-scroll">
         {BLOCKS.map(block => (
-          <section key={block[0]} className="level-block" aria-label={`Niveles ${block[0]} a ${block.at(-1)}`}>
+          <section key={block[0]} className="level-block" aria-label={t.levels.block(block[0], block.at(-1))}>
             <h2 className="block-label" aria-hidden="true">{block[0]}–{block.at(-1)}</h2>
             <ol className="level-grid">
               {block.map(level => {
@@ -53,9 +55,7 @@ export default function LevelSelect({ progress, onPlay, onBack, onDifficultyChan
                         .filter(Boolean).join(' ')}
                       disabled={locked}
                       onClick={() => onPlay(difficulty, level)}
-                      aria-label={locked
-                        ? `Nivel ${level}, bloqueado`
-                        : `Nivel ${level}${rating ? `, superado con ${rating} de 3 estrellas` : ''}`}
+                      aria-label={locked ? t.levels.locked(level) : t.levels.open(level, rating)}
                     >
                       {!locked && (
                         <>

@@ -1,0 +1,35 @@
+.language-picker {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid rgba(232, 199, 102, 0.35);
+  border-radius: 999px;
+}
+
+.language-option { position: relative; cursor: pointer; }
+
+/* Visually hidden but still focusable */
+.language-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.language-option span {
+  display: grid;
+  place-items: center;
+  min-width: 2.75rem;
+  min-height: 2rem;
+  padding: 0 0.625rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.language-option input:checked + span { background: var(--gold); color: var(--ink); }
+.language-option input:not(:checked) + span:hover { color: var(--text-light); }
+.language-option input:focus-visible + span { outline: 3px solid var(--gold); outline-offset: 2px; }

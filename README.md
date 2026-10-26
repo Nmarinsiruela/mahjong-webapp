@@ -2,7 +2,8 @@
 
 Mahjong solitaire for the browser, built mobile-first with React and Vite.
 There are 100 procedurally generated levels for each of three difficulties
-(Fácil, Normal, Difícil), and every board is guaranteed to be solvable.
+(Easy, Normal, Hard), and every board is guaranteed to be solvable. The game
+is available in Spanish and English.
 
 ## Scripts
 
@@ -20,7 +21,8 @@ src/
   logic/       game rules, level generation and state, as plain functions (no React)
   utils/       generic helpers: seeded random numbers, safe localStorage
   hooks/       useSession (state + persistence), useElementSize
-  components/  UI pieces shared by screens: DifficultyPicker, Stars, Icons
+  i18n/        UI text in Spanish and English, and the language context
+  components/  UI pieces shared by screens: DifficultyPicker, LanguagePicker, Stars, Icons
   screens/     MenuScreen, LevelSelect, and game/ (GameScreen, Board, tiles, toolbar, result panel)
   styles/      design tokens and shared controls; other CSS sits next to its component
 tests/         Vitest tests for src/logic
@@ -62,7 +64,20 @@ difficulties pick the ones a careless player loses most often.
 
 ### Tuning difficulty
 
-Everything is in `src/game/difficulty.js`. After changing it, run
+Everything is in `src/logic/difficulty.js`. After changing it, run
 `npm test`: the level tests check that every board is valid and solvable,
 that boards grow and tighten across the 100 levels, and that harder
 difficulties leave fewer tiles free.
+
+### Languages
+
+All UI text lives in `src/i18n/`, one file per language with the same shape
+(`es.js`, `en.js`). Components read it with `const { t } = useI18n()`, e.g.
+`t.menu.play(level)`; messages that include numbers are functions, so each
+language handles its own plurals. The first visit follows the browser's
+language (Spanish or English, otherwise English); the picker on the menu
+saves an explicit choice.
+
+To add a language, copy `en.js`, translate it, and register it in
+`MESSAGES` and `LANGUAGES` in `src/i18n/index.js`. `npm test` checks that
+every language has exactly the same messages as Spanish.

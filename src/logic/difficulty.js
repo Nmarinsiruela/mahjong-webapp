@@ -6,11 +6,10 @@
 //  - deal forgiveness → how easily a careless match leads to a dead end; the
 //    floor is the lowest simulated win rate a deal may have (see rateDeal)
 //  - fewer assists, and blocked tiles not greyed out
+// Names and descriptions shown to players are in src/i18n.
 export const DIFFICULTIES = {
   easy: {
-    name: 'Fácil',
     glyph: '易',
-    summary: 'Tableros bajos y abiertos. Pistas, deshacer y barajar sin límite.',
     tiles: [24, 116],
     layers: [2, 3],
     aspect: [0.75, 0.9],
@@ -21,9 +20,7 @@ export const DIFFICULTIES = {
     dimBlocked: true,
   },
   normal: {
-    name: 'Normal',
     glyph: '中',
-    summary: 'Pilas más altas y alguna trampa. 3 pistas, 3 deshacer y 2 barajadas por nivel.',
     tiles: [36, 140],
     layers: [2, 5],
     aspect: [0.9, 1.15],
@@ -34,9 +31,7 @@ export const DIFFICULTIES = {
     dimBlocked: true,
   },
   hard: {
-    name: 'Difícil',
     glyph: '難',
-    summary: 'Torres altas, filas largas y parejas engañosas. Sin pistas ni deshacer, y las fichas bloqueadas no se marcan.',
     tiles: [60, 144],
     layers: [3, 6],
     aspect: [1.25, 1.5],

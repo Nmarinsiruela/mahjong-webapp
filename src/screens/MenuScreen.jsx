@@ -1,11 +1,13 @@
 import DifficultyPicker from '../components/DifficultyPicker';
-import { DIFFICULTIES } from '../logic/difficulty';
+import LanguagePicker from '../components/LanguagePicker';
+import { useI18n } from '../i18n';
 import { LEVEL_COUNT } from '../logic/levels';
 import { nextLevel, completedCount } from '../logic/progress';
 import { tilesLeft } from '../logic/game';
 import './MenuScreen.css';
 
 export default function MenuScreen({ game, progress, onContinue, onPlay, onLevels, onDifficultyChange }) {
+  const { t } = useI18n();
   const { difficulty } = progress;
   const level = nextLevel(progress, difficulty);
   const done = completedCount(progress, difficulty);
@@ -13,30 +15,34 @@ export default function MenuScreen({ game, progress, onContinue, onPlay, onLevel
 
   return (
     <div className="screen menu">
-      <h1 className="menu-title">Mahjong<br />Solitario</h1>
+      <div className="menu-language">
+        <LanguagePicker />
+      </div>
+
+      <h1 className="menu-title">{t.titleLines[0]}<br />{t.titleLines[1]}</h1>
 
       {resumable && (
         <button type="button" className="resume ivory" onClick={onContinue}>
-          <span className="resume-label">Continuar el nivel {game.level}</span>
+          <span className="resume-label">{t.menu.resume(game.level)}</span>
           <span className="resume-meta">
-            {DIFFICULTIES[game.difficulty].name}, quedan {tilesLeft(game)} fichas
+            {t.menu.resumeDetail(t.difficulty[game.difficulty].name, tilesLeft(game))}
           </span>
         </button>
       )}
 
       <section className="menu-section" aria-labelledby="difficulty-heading">
-        <h2 id="difficulty-heading" className="section-title">Elige la dificultad</h2>
+        <h2 id="difficulty-heading" className="section-title">{t.difficulty.choose}</h2>
         <DifficultyPicker value={difficulty} onChange={onDifficultyChange} />
-        <p className="difficulty-summary" aria-live="polite">{DIFFICULTIES[difficulty].summary}</p>
+        <p className="difficulty-summary" aria-live="polite">{t.difficulty[difficulty].summary}</p>
       </section>
 
       <div className="menu-actions">
         <button type="button" className="btn btn-primary" onClick={() => onPlay(difficulty, level)}>
-          Jugar el nivel {level}
+          {t.menu.play(level)}
         </button>
         <button type="button" className="btn btn-secondary" onClick={onLevels}>
-          Elegir nivel
-          <span className="btn-note">{done} de {LEVEL_COUNT} superados</span>
+          {t.menu.chooseLevel}
+          <span className="btn-note">{t.menu.completed(done, LEVEL_COUNT)}</span>
         </button>
       </div>
     </div>

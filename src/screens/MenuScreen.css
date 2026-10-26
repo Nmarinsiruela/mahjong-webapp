@@ -1,10 +1,17 @@
 .menu {
+  position: relative;
   width: 100%;
   max-width: 30rem;
   margin: 0 auto;
-  padding: max(2.5rem, env(safe-area-inset-top)) 1.25rem max(2rem, env(safe-area-inset-bottom));
+  padding: max(4rem, env(safe-area-inset-top)) 1.25rem max(2rem, env(safe-area-inset-bottom));
   justify-content: center;
   gap: 2rem;
+}
+
+.menu-language {
+  position: absolute;
+  top: max(1rem, env(safe-area-inset-top));
+  right: 1.25rem;
 }
 
 .menu-title {
