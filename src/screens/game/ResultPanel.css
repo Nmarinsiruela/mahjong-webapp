@@ -1,0 +1,49 @@
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba(6, 30, 17, 0.66);
+}
+
+.panel {
+  width: 100%;
+  max-width: 22rem;
+  padding: 1.75rem 1.5rem 1.5rem;
+  border-radius: 14px;
+  animation: panel-in 0.28s ease-out both;
+}
+.panel.ivory {
+  box-shadow: 3px 3px 0 var(--bone-dark), 4px 4px 0 var(--bone-dark), 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.panel h2 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.panel p {
+  margin-top: 0.625rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.panel-actions { display: grid; gap: 0.625rem; margin-top: 1.5rem; }
+
+.panel-win .pips { margin-bottom: 1rem; }
+.panel-win .pip.on { animation: pip-pop 0.36s cubic-bezier(0.3, 1.6, 0.5, 1) both; }
+.panel-win .pip:nth-child(1) { animation-delay: 0.2s; }
+.panel-win .pip:nth-child(2) { animation-delay: 0.34s; }
+.panel-win .pip:nth-child(3) { animation-delay: 0.48s; }
+
+@keyframes panel-in { from { opacity: 0; transform: translateY(14px); } }
+@keyframes pip-pop { from { opacity: 0; transform: scale(0.3); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .panel, .panel-win .pip.on { animation: none; }
+}

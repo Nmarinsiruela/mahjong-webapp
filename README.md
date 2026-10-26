@@ -1,16 +1,68 @@
-# React + Vite
+# Mahjong Solitario
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Mahjong solitaire for the browser, built mobile-first with React and Vite.
+There are 100 procedurally generated levels for each of three difficulties
+(Fácil, Normal, Difícil), and every board is guaranteed to be solvable.
 
-Currently, two official plugins are available:
+## Scripts
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```sh
+npm run dev      # dev server
+npm test         # game logic tests (Vitest), including all 300 levels
+npm run lint
+npm run build
+```
 
-## React Compiler
+## How it fits together
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```
+src/
+  logic/       game rules, level generation and state, as plain functions (no React)
+  utils/       generic helpers: seeded random numbers, safe localStorage
+  hooks/       useSession (state + persistence), useElementSize
+  components/  UI pieces shared by screens: DifficultyPicker, Stars, Icons
+  screens/     MenuScreen, LevelSelect, and game/ (GameScreen, Board, tiles, toolbar, result panel)
+  styles/      design tokens and shared controls; other CSS sits next to its component
+tests/         Vitest tests for src/logic
+```
 
-## Expanding the ESLint configuration
+The UI only renders state and dispatches actions; every game rule is in `src/logic/`:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| File | Role |
+| --- | --- |
+| `tiles.js` | Tile faces and match classes (flowers and seasons match within their group) |
+| `rules.js` | Which tiles are free (tracked incrementally for simulations) and the hint heuristic |
+| `layout.js` | Procedural layouts: symmetric heightmaps fitted to a target tile count |
+| `deal.js` | Solvable deals and shuffles, rated by simulated play |
+| `difficulty.js` | Difficulty presets: every tuning knob in one place |
+| `levels.js` | Turns (difficulty, level) into a deterministic board |
+| `game.js` | One level being played: select, undo, hint, shuffle, and when each is allowed |
+| `progress.js` | Unlocked levels and star ratings |
+| `session.js` | Combines game and progress, so a win is recorded with the winning move |
+
+### Levels
+
+`buildLevel(difficulty, level)` is seeded from its arguments, so a level is
+always the same board. Each difficulty preset gives a range of values for
+level 1 and level 100, and the levels in between are interpolated. Progress
+comes in waves: each block of ten ends a little harder than the next block
+starts.
+
+### Solvable deals
+
+A deal starts as a removal plan. Pairs of currently free positions are taken
+off one at a time until the board is empty, and each pair then gets matching
+faces. Playing the plan forwards is a solution.
+
+Several candidate deals are generated and each is played many times by two
+simulated players: a careless one (any match) and a careful one (safe matches
+first, then the highest tiles). A deal is only accepted if the careful player
+wins often enough for the difficulty. Among the accepted deals, harder
+difficulties pick the ones a careless player loses most often.
+
+### Tuning difficulty
+
+Everything is in `src/game/difficulty.js`. After changing it, run
+`npm test`: the level tests check that every board is valid and solvable,
+that boards grow and tighten across the 100 levels, and that harder
+difficulties leave fewer tiles free.

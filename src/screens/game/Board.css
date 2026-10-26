@@ -1,0 +1,10 @@
+.board-fit {
+  position: absolute;
+  inset: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board { position: relative; transform-origin: top left; }
+.tile-slot { position: absolute; }

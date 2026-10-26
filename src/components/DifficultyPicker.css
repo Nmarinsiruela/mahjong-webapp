@@ -1,0 +1,62 @@
+.difficulty-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.875rem;
+}
+
+.difficulty-option { position: relative; display: block; cursor: pointer; }
+
+/* Visually hidden but still focusable */
+.difficulty-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.difficulty-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  aspect-ratio: 4 / 5;
+  border-radius: 10px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.difficulty-glyph {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 11vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--glyph);
+}
+
+.difficulty-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.difficulty-option input:not(:checked) + .difficulty-face { filter: saturate(0.5) brightness(0.84); }
+.difficulty-option input:checked + .difficulty-face {
+  transform: translateY(-6px);
+  border-color: var(--gold-deep);
+  box-shadow: 2px 2px 0 var(--bone-dark), 3px 3px 0 var(--bone-dark), 0 12px 20px rgba(0, 0, 0, 0.3);
+}
+.difficulty-option input:focus-visible + .difficulty-face { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+.difficulty-picker.compact { gap: 0.5rem; }
+.compact .difficulty-face {
+  flex-direction: row;
+  aspect-ratio: auto;
+  gap: 0.5rem;
+  padding: 0.5rem 0.625rem;
+}
+.compact .difficulty-glyph { font-size: 1.25rem; }
+.compact .difficulty-option input:checked + .difficulty-face { transform: translateY(-2px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .difficulty-face { transition: none; }
+}

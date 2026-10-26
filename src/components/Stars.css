@@ -1,0 +1,7 @@
+.pips { display: inline-flex; gap: 3px; }
+.pip { width: 6px; height: 6px; border-radius: 50%; background: rgba(29, 43, 35, 0.16); }
+.pip.on { background: var(--gold-deep); }
+
+.pips-lg { gap: 0.625rem; }
+.pips-lg .pip { width: 1.375rem; height: 1.375rem; box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.12); }
+.pips-lg .pip.on { background: radial-gradient(circle at 35% 30%, #ffe08a, var(--gold-deep) 75%); }

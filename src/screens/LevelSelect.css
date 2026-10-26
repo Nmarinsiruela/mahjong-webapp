@@ -1,0 +1,70 @@
+.levels { height: 100vh; height: 100dvh; }
+
+.levels-picker {
+  padding: 0.875rem 0.75rem 0.75rem;
+  background: var(--felt-deep);
+}
+.levels-picker .difficulty-picker { max-width: 40rem; margin: 0 auto; }
+
+.levels-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 1rem max(2rem, env(safe-area-inset-bottom));
+  background: var(--felt);
+}
+
+.level-block { max-width: 40rem; margin: 0 auto; padding-top: 1.125rem; }
+
+.block-label {
+  margin-bottom: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.level-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.625rem 0.5rem;
+}
+@media (min-width: 40rem) {
+  .level-grid { grid-template-columns: repeat(10, 1fr); }
+}
+
+.level-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  width: 100%;
+  aspect-ratio: 52 / 64;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.level-tile.ivory:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--bone-dark); }
+
+.level-number {
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 5.5vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Face-down: the green tile back */
+.level-tile.locked {
+  border: 2px solid #0b3a20;
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.04) 0 4px, transparent 4px 8px),
+    linear-gradient(160deg, #1f7a45, var(--felt-deep));
+  box-shadow: 2px 2px 0 #062414, 3px 3px 0 #062414, inset 0 0 0 3px rgba(232, 199, 102, 0.12);
+  cursor: default;
+}
+
+.level-tile.current {
+  border-color: var(--gold-deep);
+  box-shadow: 2px 2px 0 var(--bone-dark), 3px 3px 0 var(--bone-dark), 0 0 0 3px var(--gold);
+}
